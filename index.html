@@ -1,4 +1,4 @@
-
+       
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -10,14 +10,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
         body {
             background: #0b0b0c;
             color: white;
             padding-bottom: 80px;
         }
-        /* Header + Balance */
         .top-bar {
             background: #16171b;
             padding: 12px 16px;
@@ -51,7 +50,6 @@
             font-size: 1.2rem;
             color: #00ffcc;
         }
-        /* Bet Panel */
         .bet-panel {
             background: #16171b;
             margin: 16px;
@@ -83,11 +81,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: #ffcc00;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        /* Game Grid - 3 columns desktop, 2 on mobile */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -135,7 +129,6 @@
             color: #888;
             margin-top: 4px;
         }
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -159,7 +152,6 @@
             font-size: 1.4rem;
             margin-bottom: 4px;
         }
-        /* Game Modal Overlay */
         .game-overlay {
             display: none;
             position: fixed;
@@ -260,7 +252,6 @@
     </div>
 </div>
 
-<!-- Game Modal -->
 <div id="gameOverlay" class="game-overlay">
     <div class="overlay-card">
         <div class="back-btn" onclick="closeGame()">⬅ ወደ ጨዋታ ዝርዝር</div>
@@ -269,42 +260,44 @@
 </div>
 
 <script>
-    // ---------- ሁሉም 30 ጨዋታዎች (ከምስሉ ላይ) ----------
+    // ሁሉም 30 ጨዋታዎች (ከላከኸው ምስል ጋር ተስተካክለዋል)
     const games = [
         "Aviator", "Fast Keno", "Mother Clucker", "Multi Hot 5", "Buffalo",
-        "Burning Class", "Fruity Wilds", "Safari Simba", "Chicken I", "Fruit Rush",
-        "Mine Gems", "Mine", "Multi Fruit", "Plinko 1000", "Power of",
+        "Burning Class", "Fruity Wilds", "Safari Simba", "Chicken Road 2", "Fruit Rush",
+        "Mine Gems", "Mines", "Multi Fruit", "Plinko 1000", "Power of Tiger",
         "Rocket Dice", "Sugar Heaven", "Aviamasters", "Hot Keno", "Rabbit Road",
         "Fish Road", "Rocket", "Chicken Roast", "Bingo", "Chicken vs Zombies",
         "Insta Keno", "Mini Roulette", "Dice", "Cricket Road", "Wheel"
     ];
 
-    // ለእያንዳንዱ ጨዋታ ተገቢ ኢሞጂ
-    function getEmoji(gameName) {
-        const name = gameName.toLowerCase();
-        if (name.includes('aviator')) return '✈️';
-        if (name.includes('chicken')) return '🐔';
-        if (name.includes('rabbit')) return '🐇';
-        if (name.includes('fish')) return '🐟';
-        if (name.includes('mine')) return '💎';
-        if (name.includes('rocket')) return '🚀';
-        if (name.includes('dice')) return '🎲';
-        if (name.includes('wheel')) return '🎡';
-        if (name.includes('keno')) return '🎰';
-        if (name.includes('cricket')) return '🏏';
-        if (name.includes('fruit')) return '🍒';
-        if (name.includes('sugar')) return '🍬';
-        if (name.includes('buffalo')) return '🐃';
-        if (name.includes('plinko')) return '⚫';
-        if (name.includes('bingo')) return '🔢';
-        if (name.includes('zombies')) return '🧟';
-        if (name.includes('roulette')) return '🎯';
-        if (name.includes('aviamasters')) return '🦅';
-        if (name.includes('mother clucker')) return '🐓';
+    function getEmoji(name) {
+        const n = name.toLowerCase();
+        if (n.includes('aviator')) return '✈️';
+        if (n.includes('chicken')) return '🐔';
+        if (n.includes('rabbit')) return '🐇';
+        if (n.includes('fish')) return '🐟';
+        if (n.includes('mine')) return '💎';
+        if (n.includes('rocket')) return '🚀';
+        if (n.includes('dice')) return '🎲';
+        if (n.includes('wheel')) return '🎡';
+        if (n.includes('keno')) return '🎰';
+        if (n.includes('cricket')) return '🏏';
+        if (n.includes('fruit')) return '🍒';
+        if (n.includes('sugar')) return '🍬';
+        if (n.includes('buffalo')) return '🐃';
+        if (n.includes('plinko')) return '⚫';
+        if (n.includes('bingo')) return '🔢';
+        if (n.includes('zombies')) return '🧟';
+        if (n.includes('roulette')) return '🎯';
+        if (n.includes('aviamasters')) return '🦅';
+        if (n.includes('mother clucker')) return '🐓';
+        if (n.includes('multi hot')) return '🔥';
+        if (n.includes('burning')) return '🔥';
+        if (n.includes('safari')) return '🦁';
+        if (n.includes('power of tiger')) return '🐯';
         return '🎮';
     }
 
-    // ሁሉንም ካርዶች መፍጠር
     function renderGameGrid() {
         const container = document.getElementById('gameGrid');
         container.innerHTML = '';
@@ -323,7 +316,6 @@
         });
     }
 
-    // ---------- ቀሪ ሂሳብ እና ውርርድ አስተዳደር ----------
     let userBalance = 500.00;
     const balanceSpan = document.getElementById('globalBalance');
     const betInput = document.getElementById('globalBet');
@@ -354,7 +346,7 @@
 
     function handleAction(type) {
         if (type === 'deposit') {
-            alert("📥 ገንዘብ ለማስገባት፦ ቴሌብር 0974107425 (Mulualem) ላይ ያስገቡ። ዝቅተኛ 50 ETB። ከዚያ ማስረጃ ወደ @WaseBet12 ይላኩ።");
+            alert("📥 ገንዘብ ለማስገባት፦ ቴሌብር 0974107425 (Mulualem) ላይ ያስገቡ። ዝቅተኛ 50 ETB። ማስረጃ ወደ @WaseBet12 ይላኩ።");
             window.open('https://t.me/WaseBet12', '_blank');
         } else {
             alert("💸 መውጫ ለማድረግ ከ300 ETB በላይ መሆን አለበት። አስተዳዳሪ @WaseBet12 ያነጋግሩ።");
@@ -362,19 +354,15 @@
         }
     }
 
-    // ---------- Crash Game Engine (ለማንኛውም ጨዋታ አንድ አይነት መልክ) ----------
     let activeGameInterval = null;
     let isGameActive = false;
     let currentMulti = 1.00;
     let currentBetValue = 0;
-    let currentGameName = "";
 
     function openGame(gameName) {
-        currentGameName = gameName;
         const overlay = document.getElementById('gameOverlay');
         const contentDiv = document.getElementById('gameContent');
         overlay.style.display = 'block';
-        // የጨዋታ በይነገጽ መገንባት
         contentDiv.innerHTML = `
             <h2 style="text-align:center; margin-bottom:10px;">${getEmoji(gameName)} ${gameName}</h2>
             <div class="game-viewport">
@@ -409,7 +397,6 @@
                     if (isGameActive) {
                         currentMulti += 0.045;
                         multSpan.innerText = currentMulti.toFixed(2) + "x";
-                        // በዘፈቀደ የመውደቅ እድል (8.5%)
                         if (Math.random() < 0.085 && currentMulti > 1.25) {
                             clearInterval(activeGameInterval);
                             statusSpan.innerHTML = `💥 ጨዋታው ወደቀ! አጣህ ${currentBetValue} ETB`;
@@ -420,7 +407,6 @@
                     }
                 }, 90);
             } else {
-                // Cash out
                 if (activeGameInterval) clearInterval(activeGameInterval);
                 let winAmount = Math.floor(currentBetValue * currentMulti);
                 addWinnings(winAmount);
@@ -439,7 +425,6 @@
         isGameActive = false;
     }
 
-    // ገጹ ሲጫን ጨዋታዎችን አሳይ
     renderGameGrid();
     updateBalanceUI();
 </script>
