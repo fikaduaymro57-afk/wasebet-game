@@ -1,15 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Wase Bet – ኦፊሴላዊ የጨዋታ ማዕከል</title>
+    <title>Wase Bet – ኦፊሴላዊ የጨዋታ መድረክ</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
         }
         body {
             background: #0b0b0c;
@@ -78,6 +79,11 @@
             border-radius: 30px;
             cursor: pointer;
             font-size: 0.9rem;
+            transition: 0.1s;
+        }
+        .bet-quick:active {
+            background: #ffcc00;
+            color: black;
         }
         .bet-input {
             background: #0b0b0c;
@@ -161,6 +167,10 @@
             font-size: 0.7rem;
             cursor: pointer;
             flex: 1;
+            transition: 0.1s;
+        }
+        .nav-item:active {
+            color: #ffcc00;
         }
         .nav-icon {
             font-size: 1.4rem;
@@ -207,6 +217,10 @@
             font-weight: 800;
             color: #ff3366;
             margin: 20px 0;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 60px;
         }
         .action-btn {
             background: #ffcc00;
@@ -217,6 +231,7 @@
             border-radius: 60px;
             margin-top: 15px;
             cursor: pointer;
+            font-size: 1rem;
         }
         .cashout-btn {
             background: #2e7d32;
@@ -227,6 +242,18 @@
             font-size: 0.8rem;
             color: #ffaa66;
         }
+        .plane-animation {
+            position: relative;
+            height: 100px;
+            margin: 10px 0;
+        }
+        .plane {
+            font-size: 2.5rem;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            transition: left 0.05s linear;
+        }
     </style>
 </head>
 <body>
@@ -235,7 +262,7 @@
     <div class="logo">⚡ WASE BET</div>
     <div class="balance-wrap">
         <span>💰 ቀሪ</span>
-        <span class="balance-amount" id="globalBalance">500.00</span>
+        <span class="balance-amount" id="globalBalance">150.00</span>
     </div>
 </div>
 
@@ -294,7 +321,8 @@
         "Fish Road", "Rocket", "Chicken Roast", "Bingo", "Chicken vs Zombies",
         "Insta Keno", "Mini Roulette", "Dice", "Cricket Road", "Wheel",
         "Chicken Road Gold", "Chicken Road Ice", "Chicken Road Vegas", "Mega Block",
-        "Penalty Nations", "Classic Keno", "Chicken Highway", "Juicy Fruits"
+        "Penalty Nations", "Classic Keno", "Chicken Highway", "Juicy Fruits",
+        "Cricket Road", "Roulette", "Dice 2"
     ];
 
     function getEmoji(name) {
@@ -327,8 +355,8 @@
         return '🎮';
     }
 
-    // ---------- Balance & Bet Management ----------
-    let userBalance = 500.00;
+    // ---------- ቀሪ ሂሳብ እና ውርርድ አስተዳደር (መነሻ 150) ----------
+    let userBalance = 150.00;
     const balanceSpan = document.getElementById('globalBalance');
     const customBetInput = document.getElementById('customBet');
 
@@ -342,7 +370,7 @@
         if (saved !== null && !isNaN(parseFloat(saved))) {
             userBalance = parseFloat(saved);
         } else {
-            userBalance = 500.00;
+            userBalance = 150.00;
         }
         updateBalanceUI();
     }
@@ -389,7 +417,7 @@
         }
     }
 
-    // ---------- Crash Game Engine ----------
+    // ---------- የCrash Game ሞተር (ለሁሉም ጨዋታዎች ተመሳሳይ) ----------
     let activeGameInterval = null;
     let isGameActive = false;
     let currentMulti = 1.00;
@@ -403,6 +431,9 @@
             <h2 style="text-align:center; margin-bottom:10px;">${getEmoji(gameName)} ${gameName}</h2>
             <div class="game-viewport">
                 <div id="gameMulti" class="multiplier-big">1.00x</div>
+                <div class="plane-animation">
+                    <div id="movingIcon" class="plane" style="font-size:2.5rem;">${getEmoji(gameName)}</div>
+                </div>
                 <button id="gameActionBtn" class="action-btn">🚀 SPIN (ውርርድ አስጀምር)</button>
                 <div id="gameStatus" class="status-msg">⚡ ውርርድ ለመጀመር SPIN ተጫን</div>
             </div>
@@ -424,15 +455,23 @@
                 currentMulti = 1.00;
                 const multSpan = document.getElementById('gameMulti');
                 const statusSpan = document.getElementById('gameStatus');
+                const movingIcon = document.getElementById('movingIcon');
                 multSpan.innerText = "1.00x";
                 statusSpan.innerHTML = `✈️ ${gameName} እየበረረ ነው... ካሽ አውት ተጫን!`;
                 actionBtn.innerText = "🛬 ካሽ አውት (CASH OUT)";
                 actionBtn.classList.add('cashout-btn');
                 if (activeGameInterval) clearInterval(activeGameInterval);
+                let leftPos = 0;
+                if (movingIcon) movingIcon.style.left = "0px";
                 activeGameInterval = setInterval(() => {
                     if (isGameActive) {
                         currentMulti += 0.045;
                         multSpan.innerText = currentMulti.toFixed(2) + "x";
+                        if (movingIcon) {
+                            leftPos += Math.min(8, 3 + currentMulti * 1.2);
+                            if (leftPos > 280) leftPos = 280;
+                            movingIcon.style.left = leftPos + "px";
+                        }
                         if (Math.random() < 0.09 && currentMulti > 1.2) {
                             clearInterval(activeGameInterval);
                             statusSpan.innerHTML = `💥 ${gameName} ወደቀ! አጣህ ${currentBetValue} ETB`;
@@ -479,4 +518,8 @@
         });
     }
 
-    loadBalance(
+    loadBalance();
+    renderGameGrid();
+</script>
+</body>
+</html>
