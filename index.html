@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -7,27 +8,103 @@
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #1a1a1a; color: white; margin: 0; padding: 20px; }
         .container { max-width: 500px; margin: auto; background: #2a2a2a; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        h1 { color: #ffcc00; }
-        .game-box { background: #333; margin: 15px 0; padding: 15px; border-radius: 8px; border: 1px solid #444; }
-        button { background: #ffcc00; color: black; border: none; padding: 10px 20px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; }
+        h1 { color: #ffcc00; margin-bottom: 5px; }
+        .subtitle { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+        .game-box { background: #333; margin: 20px 0; padding: 20px; border-radius: 8px; border: 1px solid #444; }
+        button { background: #ffcc00; color: black; border: none; padding: 12px 20px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; }
         button:hover { background: #e6b800; }
+        .game-area { display: none; margin-top: 15px; padding: 15px; background: #111; border-radius: 5px; }
+        .multiplier { font-size: 32px; color: #ff3366; font-weight: bold; margin: 10px 0; }
+        .chicken-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+        .tile { background: #444; padding: 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .tile:hover { background: #555; }
+        .status { margin-top: 10px; font-weight: bold; color: #ffcc00; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎉 Wase Bet 🎉</h1>
-        <p>እንኳን ወደ ሚኒ ጌሞች በደህና መጡ!</p>
+        <div class="subtitle">እንኳን ወደ ሚኒ ጌሞች በደህና መጡ!</div>
         
+        <!-- Aviator Game -->
         <div class="game-box">
             <h3>✈️ Aviator Game</h3>
-            <button onclick="alert('Aviator ጌም በቅርቡ ይጀምራል!')">አሁኑኑ ይጫወቱ</button>
+            <button id="btn-aviator" onclick="startAviator()">አሁኑኑ ይጫወቱ</button>
+            <div id="aviator-area" class="game-area">
+                <div style="font-size: 24px;">✈️</div>
+                <div id="aviator-mult" class="multiplier">1.00x</div>
+                <button style="background: #ff3366; color: white;" onclick="cashoutAviator()">Cash Out</button>
+            </div>
         </div>
 
+        <!-- Chicken Road Game -->
         <div class="game-box">
             <h3>🐔 Chicken Road</h3>
-            <button onclick="alert('Chicken Road ጌም በቅርቡ ይጀምራል!')">አሁኑኑ ይጫወቱ</button>
+            <button id="btn-chicken" onclick="startChicken()">አሁኑኑ ይጫወቱ</button>
+            <div id="chicken-area" class="game-area">
+                <p>ቦምቡን ሳትነካ ዶሮዋን አሻግር!</p>
+                <div class="chicken-grid">
+                    <div class="tile" onclick="playChicken(this, false)">🌾</div>
+                    <div class="tile" onclick="playChicken(this, true)">💣</div>
+                    <div class="tile" onclick="playChicken(this, false)">🌾</div>
+                </div>
+                <div id="chicken-status" class="status"></div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Aviator Logic
+        let aviatorInterval;
+        let currentMult = 1.00;
+        function startAviator() {
+            document.getElementById('aviator-area').style.display = 'block';
+            document.getElementById('btn-aviator').style.display = 'none';
+            currentMult = 1.00;
+            aviatorInterval = setInterval(() => {
+                currentMult += 0.05;
+                document.getElementById('aviator-mult').innerText = currentMult.toFixed(2) + 'x';
+                if(Math.random() < 0.03 && currentMult > 1.5) {
+                    clearInterval(aviatorInterval);
+                    document.getElementById('aviator-mult').innerText = '💥 Flew Away!';
+                    setTimeout(resetAviator, 2000);
+                }
+            }, 100);
+        }
+        function cashoutAviator() {
+            clearInterval(aviatorInterval);
+            alert('💰 ተሳክቷል! በ ' + currentMult.toFixed(2) + 'x አሸንፈዋል!');
+            resetAviator();
+        }
+        function resetAviator() {
+            document.getElementById('aviator-area').style.display = 'none';
+            document.getElementById('btn-aviator').style.display = 'block';
+        }
+
+        // Chicken Road Logic
+        function startChicken() {
+            document.getElementById('chicken-area').style.display = 'block';
+            document.getElementById('btn-chicken').style.display = 'none';
+            document.getElementById('chicken-status').innerText = '';
+        }
+        function playChicken(element, isBomb) {
+            if(isBomb) {
+                element.innerText = '💥';
+                document.getElementById('chicken-status').innerText = '❌ ቦምብ አጋጠመዎት! ተሸንፈዋል!';
+                setTimeout(resetChicken, 2000);
+            } else {
+                element.innerText = '🐥';
+                document.getElementById('chicken-status').innerText = '🎉 ሣር አግኝተዋል! አሸንፈዋል!';
+                setTimeout(resetChicken, 2000);
+            }
+        }
+        function resetChicken() {
+            document.getElementById('chicken-area').style.display = 'none';
+            document.getElementById('btn-chicken').style.display = 'block';
+            let tiles = document.querySelectorAll('.tile');
+            tiles[0].innerText = '🌾'; tiles[1].innerText = '💣'; tiles[2].innerText = '🌾';
+        }
+    </script>
 </body>
 </html>
 
