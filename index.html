@@ -1,10 +1,9 @@
-       
 <!DOCTYPE html>
 <html lang="am">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Wase Bet - ሁሉም ጨዋታዎች</title>
+    <title>Wase Bet – ኦፊሴላዊ የጨዋታ ማዕከል</title>
     <style>
         * {
             margin: 0;
@@ -65,6 +64,21 @@
             color: #aaa;
             font-size: 0.85rem;
         }
+        .bet-quick-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .bet-quick {
+            background: #2a2c34;
+            border: none;
+            color: #ffcc00;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
         .bet-input {
             background: #0b0b0c;
             border: 1px solid #323641;
@@ -72,7 +86,7 @@
             font-weight: bold;
             padding: 8px 14px;
             border-radius: 30px;
-            width: 110px;
+            width: 100px;
             text-align: center;
         }
         .section-title {
@@ -159,8 +173,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(11,11,12,0.96);
-            backdrop-filter: blur(6px);
+            background: rgba(11,11,12,0.97);
+            backdrop-filter: blur(8px);
             z-index: 200;
             overflow-y: auto;
             padding: 20px 16px;
@@ -227,10 +241,17 @@
 
 <div class="bet-panel">
     <span class="bet-label">🎲 ውርርድ (ETB)</span>
-    <input type="number" id="globalBet" class="bet-input" value="10" step="5" min="2">
+    <div class="bet-quick-buttons">
+        <button class="bet-quick" data-bet="5">5</button>
+        <button class="bet-quick" data-bet="10">10</button>
+        <button class="bet-quick" data-bet="20">20</button>
+        <button class="bet-quick" data-bet="50">50</button>
+        <button class="bet-quick" data-bet="100">100</button>
+    </div>
+    <input type="number" id="customBet" class="bet-input" value="5" step="5" min="5" max="100">
 </div>
 
-<div class="section-title">🎮 ሁሉም ጨዋታዎች (30)</div>
+<div class="section-title">🎮 ሁሉም ጨዋታዎች (Crash Games)</div>
 <div id="gameGrid" class="games-grid"></div>
 
 <div class="bottom-nav">
@@ -246,6 +267,10 @@
         <div class="nav-icon">💸</div>
         <div>Withdraw</div>
     </div>
+    <div class="nav-item" onclick="window.open('https://t.me/Wase_Bet', '_blank')">
+        <div class="nav-icon">👥</div>
+        <div>Official Group</div>
+    </div>
     <div class="nav-item" onclick="window.open('https://t.me/WaseBet12', '_blank')">
         <div class="nav-icon">☎️</div>
         <div>Support</div>
@@ -260,14 +285,16 @@
 </div>
 
 <script>
-    // ሁሉም 30 ጨዋታዎች (ከላከኸው ምስል ጋር ተስተካክለዋል)
+    // ---------- ሁሉም 40+ ጨዋታዎች ----------
     const games = [
         "Aviator", "Fast Keno", "Mother Clucker", "Multi Hot 5", "Buffalo",
         "Burning Class", "Fruity Wilds", "Safari Simba", "Chicken Road 2", "Fruit Rush",
         "Mine Gems", "Mines", "Multi Fruit", "Plinko 1000", "Power of Tiger",
         "Rocket Dice", "Sugar Heaven", "Aviamasters", "Hot Keno", "Rabbit Road",
         "Fish Road", "Rocket", "Chicken Roast", "Bingo", "Chicken vs Zombies",
-        "Insta Keno", "Mini Roulette", "Dice", "Cricket Road", "Wheel"
+        "Insta Keno", "Mini Roulette", "Dice", "Cricket Road", "Wheel",
+        "Chicken Road Gold", "Chicken Road Ice", "Chicken Road Vegas", "Mega Block",
+        "Penalty Nations", "Classic Keno", "Chicken Highway", "Juicy Fruits"
     ];
 
     function getEmoji(name) {
@@ -295,7 +322,143 @@
         if (n.includes('burning')) return '🔥';
         if (n.includes('safari')) return '🦁';
         if (n.includes('power of tiger')) return '🐯';
+        if (n.includes('penalty')) return '⚽';
+        if (n.includes('classic')) return '🎰';
         return '🎮';
+    }
+
+    // ---------- Balance & Bet Management ----------
+    let userBalance = 500.00;
+    const balanceSpan = document.getElementById('globalBalance');
+    const customBetInput = document.getElementById('customBet');
+
+    function updateBalanceUI() {
+        balanceSpan.innerText = userBalance.toFixed(2);
+        localStorage.setItem('wasebet_balance', userBalance);
+    }
+
+    function loadBalance() {
+        let saved = localStorage.getItem('wasebet_balance');
+        if (saved !== null && !isNaN(parseFloat(saved))) {
+            userBalance = parseFloat(saved);
+        } else {
+            userBalance = 500.00;
+        }
+        updateBalanceUI();
+    }
+
+    function getCurrentBet() {
+        let val = parseFloat(customBetInput.value);
+        if (isNaN(val) || val < 5) return 5;
+        if (val > 100) return 100;
+        return val;
+    }
+
+    function setQuickBet(amount) {
+        customBetInput.value = amount;
+    }
+
+    document.querySelectorAll('.bet-quick').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setQuickBet(parseInt(btn.dataset.bet));
+        });
+    });
+
+    function deductBet(amount) {
+        if (userBalance < amount) {
+            alert(`❌ በቂ ነጥብ የለም! ቀሪ: ${userBalance.toFixed(2)} ETB\nእባክዎ ገንዘብ ያስገቡ (ዝቅተኛ 100 ETB)`);
+            return false;
+        }
+        userBalance -= amount;
+        updateBalanceUI();
+        return true;
+    }
+
+    function addWinnings(amount) {
+        userBalance += amount;
+        updateBalanceUI();
+    }
+
+    function handleAction(type) {
+        if (type === 'deposit') {
+            alert("📥 ገንዘብ ለማስገባት፦\n📞 ቴሌብር: 0974107425 (Mulualem)\n💵 ዝቅተኛ: 100 ETB\n💵 ከፍተኛ: 10,000 ETB\n\nከላክክ በኋላ ማስረጃ ወደ @WaseBet12 ላክ።");
+            window.open('https://t.me/WaseBet12', '_blank');
+        } else {
+            alert("💸 ገንዘብ ለማውጣት፦\n⚠️ ዝቅተኛ መውጫ: 500 ETB\n\nአስተዳዳሪ @WaseBet12 ያነጋግሩ።");
+            window.open('https://t.me/WaseBet12', '_blank');
+        }
+    }
+
+    // ---------- Crash Game Engine ----------
+    let activeGameInterval = null;
+    let isGameActive = false;
+    let currentMulti = 1.00;
+    let currentBetValue = 0;
+
+    function openGame(gameName) {
+        const overlay = document.getElementById('gameOverlay');
+        const contentDiv = document.getElementById('gameContent');
+        overlay.style.display = 'block';
+        contentDiv.innerHTML = `
+            <h2 style="text-align:center; margin-bottom:10px;">${getEmoji(gameName)} ${gameName}</h2>
+            <div class="game-viewport">
+                <div id="gameMulti" class="multiplier-big">1.00x</div>
+                <button id="gameActionBtn" class="action-btn">🚀 SPIN (ውርርድ አስጀምር)</button>
+                <div id="gameStatus" class="status-msg">⚡ ውርርድ ለመጀመር SPIN ተጫን</div>
+            </div>
+        `;
+        isGameActive = false;
+        if (activeGameInterval) clearInterval(activeGameInterval);
+        attachGameEvents(gameName);
+    }
+
+    function attachGameEvents(gameName) {
+        const actionBtn = document.getElementById('gameActionBtn');
+        if (!actionBtn) return;
+        actionBtn.onclick = () => {
+            if (!isGameActive) {
+                let bet = getCurrentBet();
+                if (!deductBet(bet)) return;
+                currentBetValue = bet;
+                isGameActive = true;
+                currentMulti = 1.00;
+                const multSpan = document.getElementById('gameMulti');
+                const statusSpan = document.getElementById('gameStatus');
+                multSpan.innerText = "1.00x";
+                statusSpan.innerHTML = `✈️ ${gameName} እየበረረ ነው... ካሽ አውት ተጫን!`;
+                actionBtn.innerText = "🛬 ካሽ አውት (CASH OUT)";
+                actionBtn.classList.add('cashout-btn');
+                if (activeGameInterval) clearInterval(activeGameInterval);
+                activeGameInterval = setInterval(() => {
+                    if (isGameActive) {
+                        currentMulti += 0.045;
+                        multSpan.innerText = currentMulti.toFixed(2) + "x";
+                        if (Math.random() < 0.09 && currentMulti > 1.2) {
+                            clearInterval(activeGameInterval);
+                            statusSpan.innerHTML = `💥 ${gameName} ወደቀ! አጣህ ${currentBetValue} ETB`;
+                            isGameActive = false;
+                            actionBtn.innerText = "🚀 SPIN (ውርርድ አስጀምር)";
+                            actionBtn.classList.remove('cashout-btn');
+                        }
+                    }
+                }, 90);
+            } else {
+                if (activeGameInterval) clearInterval(activeGameInterval);
+                let winAmount = Math.floor(currentBetValue * currentMulti);
+                addWinnings(winAmount);
+                const statusSpan = document.getElementById('gameStatus');
+                statusSpan.innerHTML = `🏆 ካሽ አውት! አሸነፍክ ${winAmount} ETB (${currentMulti.toFixed(2)}x) 🎉`;
+                isGameActive = false;
+                actionBtn.innerText = "🚀 SPIN (ውርርድ አስጀምር)";
+                actionBtn.classList.remove('cashout-btn');
+            }
+        };
+    }
+
+    function closeGame() {
+        if (activeGameInterval) clearInterval(activeGameInterval);
+        document.getElementById('gameOverlay').style.display = 'none';
+        isGameActive = false;
     }
 
     function renderGameGrid() {
@@ -316,117 +479,8 @@
         });
     }
 
-    let userBalance = 500.00;
-    const balanceSpan = document.getElementById('globalBalance');
-    const betInput = document.getElementById('globalBet');
-
-    function updateBalanceUI() {
-        balanceSpan.innerText = userBalance.toFixed(2);
-    }
-
-    function getCurrentBet() {
-        let val = parseFloat(betInput.value);
-        return (isNaN(val) || val < 2) ? 10 : val;
-    }
-
-    function deductBet(amount) {
-        if (userBalance < amount) {
-            alert("❌ በቂ ነጥብ የለም! እባክዎ ገንዘብ ያስገቡ።");
-            return false;
-        }
-        userBalance -= amount;
-        updateBalanceUI();
-        return true;
-    }
-
-    function addWinnings(amount) {
-        userBalance += amount;
-        updateBalanceUI();
-    }
-
-    function handleAction(type) {
-        if (type === 'deposit') {
-            alert("📥 ገንዘብ ለማስገባት፦ ቴሌብር 0974107425 (Mulualem) ላይ ያስገቡ። ዝቅተኛ 50 ETB። ማስረጃ ወደ @WaseBet12 ይላኩ።");
-            window.open('https://t.me/WaseBet12', '_blank');
-        } else {
-            alert("💸 መውጫ ለማድረግ ከ300 ETB በላይ መሆን አለበት። አስተዳዳሪ @WaseBet12 ያነጋግሩ።");
-            window.open('https://t.me/WaseBet12', '_blank');
-        }
-    }
-
-    let activeGameInterval = null;
-    let isGameActive = false;
-    let currentMulti = 1.00;
-    let currentBetValue = 0;
-
-    function openGame(gameName) {
-        const overlay = document.getElementById('gameOverlay');
-        const contentDiv = document.getElementById('gameContent');
-        overlay.style.display = 'block';
-        contentDiv.innerHTML = `
-            <h2 style="text-align:center; margin-bottom:10px;">${getEmoji(gameName)} ${gameName}</h2>
-            <div class="game-viewport">
-                <div id="gameMulti" class="multiplier-big">1.00x</div>
-                <button id="gameActionBtn" class="action-btn">🚀 ጨዋታ ጀምር</button>
-                <div id="gameStatus" class="status-msg">⚡ ውርርድ ለመጀመር ቁልፉን ተጫን</div>
-            </div>
-        `;
-        isGameActive = false;
-        if (activeGameInterval) clearInterval(activeGameInterval);
-        attachGameEvents();
-    }
-
-    function attachGameEvents() {
-        const actionBtn = document.getElementById('gameActionBtn');
-        if (!actionBtn) return;
-        actionBtn.onclick = () => {
-            if (!isGameActive) {
-                let bet = getCurrentBet();
-                if (!deductBet(bet)) return;
-                currentBetValue = bet;
-                isGameActive = true;
-                currentMulti = 1.00;
-                const multSpan = document.getElementById('gameMulti');
-                const statusSpan = document.getElementById('gameStatus');
-                multSpan.innerText = "1.00x";
-                statusSpan.innerHTML = "✈️ ጨዋታ እየበረረ ነው... ካሽ አውት ተጫን!";
-                actionBtn.innerText = "🛬 ካሽ አውት (CASH OUT)";
-                actionBtn.classList.add('cashout-btn');
-                if (activeGameInterval) clearInterval(activeGameInterval);
-                activeGameInterval = setInterval(() => {
-                    if (isGameActive) {
-                        currentMulti += 0.045;
-                        multSpan.innerText = currentMulti.toFixed(2) + "x";
-                        if (Math.random() < 0.085 && currentMulti > 1.25) {
-                            clearInterval(activeGameInterval);
-                            statusSpan.innerHTML = `💥 ጨዋታው ወደቀ! አጣህ ${currentBetValue} ETB`;
-                            isGameActive = false;
-                            actionBtn.innerText = "🚀 ጨዋታ ጀምር";
-                            actionBtn.classList.remove('cashout-btn');
-                        }
-                    }
-                }, 90);
-            } else {
-                if (activeGameInterval) clearInterval(activeGameInterval);
-                let winAmount = Math.floor(currentBetValue * currentMulti);
-                addWinnings(winAmount);
-                const statusSpan = document.getElementById('gameStatus');
-                statusSpan.innerHTML = `🏆 ካሽ አውት! አሸነፍክ ${winAmount} ETB (${currentMulti.toFixed(2)}x) 🎉`;
-                isGameActive = false;
-                actionBtn.innerText = "🚀 ጨዋታ ጀምር";
-                actionBtn.classList.remove('cashout-btn');
-            }
-        };
-    }
-
-    function closeGame() {
-        if (activeGameInterval) clearInterval(activeGameInterval);
-        document.getElementById('gameOverlay').style.display = 'none';
-        isGameActive = false;
-    }
-
+    loadBalance();
     renderGameGrid();
-    updateBalanceUI();
 </script>
 </body>
 </html>
