@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="am">
 <head>
@@ -114,39 +113,42 @@
             }
         }
         .game-card {
-            background: #16171b;
-            border-radius: 20px;
+            background: #111;
+            border-radius: 14px;
             overflow: hidden;
-            border: 1px solid #26282e;
             cursor: pointer;
             transition: transform 0.2s, border-color 0.2s;
+            border: 1px solid #26282e;
         }
         .game-card:hover {
             transform: translateY(-4px);
             border-color: #ffb347;
         }
         .game-thumb {
-            height: 110px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8rem;
-            background: radial-gradient(circle at 30% 20%, #1f212a, #0f0f12);
+            height: 140px;
+            overflow: hidden;
+            background: #1f212a;
+        }
+        .game-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .game-info {
             padding: 10px 8px;
             text-align: center;
         }
         .game-name {
-            font-size: 0.85rem;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 700;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .game-cat {
-            font-size: 0.65rem;
-            color: #888;
+            font-size: 12px;
+            color: #aaa;
             margin-top: 4px;
         }
         .bottom-nav {
@@ -312,47 +314,52 @@
 </div>
 
 <script>
-    // ---------- ሁሉም 40+ ጨዋታዎች ----------
-    const games = [
-        "Aviator", "Fast Keno", "Mother Clucker", "Multi Hot 5", "Buffalo",
-        "Burning Class", "Fruity Wilds", "Safari Simba", "Chicken Road 2", "Fruit Rush",
-        "Mine Gems", "Mines", "Multi Fruit", "Plinko 1000", "Power of Tiger",
-        "Rocket Dice", "Sugar Heaven", "Aviamasters", "Hot Keno", "Rabbit Road",
-        "Fish Road", "Rocket", "Chicken Roast", "Bingo", "Chicken vs Zombies",
-        "Insta Keno", "Mini Roulette", "Dice", "Cricket Road", "Wheel",
-        "Chicken Road Gold", "Chicken Road Ice", "Chicken Road Vegas", "Mega Block",
-        "Penalty Nations", "Classic Keno", "Chicken Highway", "Juicy Fruits",
-        "Cricket Road", "Roulette", "Dice 2"
-    ];
+    // ---------- የጨዋታ ምስሎች ማመሳከሪያ (ከጥያቄህ) ----------
+    const gameImages = {
+        "Aviator": "images/aviator.jpg",
+        "Fast Keno": "images/fast-keno.jpg",
+        "Mother Clucker": "images/mother-clucker.jpg",
+        "Multi Hot 5": "images/multihot5.jpg",
+        "Buffalo": "images/buffalo.jpg",
+        "Burning Class": "images/burning-class.jpg",
+        "Fruity Wilds": "images/fruitywilds.jpg",
+        "Safari Simba": "images/safarisimba.jpg",
+        "Chicken Road 2": "images/chickenroad2.jpg",
+        "Fruit Rush": "images/fruitsrush.jpg",
+        "Mine Gems": "images/minegems.jpg",
+        "Mines": "images/mines.jpg",
+        "Rocket Dice": "images/rocketdice.jpg",
+        "Sugar Heaven": "images/sugarheaven.jpg",
+        "Aviamasters": "images/aviamasters.jpg",
+        "Hot Keno": "images/hotkeno.jpg",
+        "Rabbit Road": "images/rabbitroad.jpg",
+        "Fish Road": "images/fishroad.jpg",
+        "Rocket": "images/rocket.jpg",
+        "Chicken Roast": "images/chickenroast.jpg",
+        "Bingo": "images/bingo.jpg",
+        "Chicken vs Zombies": "images/chickenvszombies.jpg",
+        "Insta Keno": "images/instakeno.jpg",
+        "Mini Roulette": "images/miniroulette.jpg",
+        "Dice": "images/dice.jpg",
+        "Cricket Road": "images/cricketroad.jpg",
+        "Wheel": "images/wheel.jpg",
+        "Chicken Road Gold": "images/chickenroadgold.jpg",
+        "Chicken Road Ice": "images/chickenroadice.jpg",
+        "Chicken Road Vegas": "images/chickenroadvegas.jpg",
+        "Mega Block": "images/megablock.jpg",
+        "Penalty Nations": "images/penaltynations.jpg",
+        "Classic Keno": "images/classickeno.jpg",
+        "Chicken Highway": "images/chickenhighway.jpg",
+        "Juicy Fruits": "images/juicyfruits.jpg",
+        "Roulette": "images/roulette.jpg"
+    };
 
-    function getEmoji(name) {
-        const n = name.toLowerCase();
-        if (n.includes('aviator')) return '✈️';
-        if (n.includes('chicken')) return '🐔';
-        if (n.includes('rabbit')) return '🐇';
-        if (n.includes('fish')) return '🐟';
-        if (n.includes('mine')) return '💎';
-        if (n.includes('rocket')) return '🚀';
-        if (n.includes('dice')) return '🎲';
-        if (n.includes('wheel')) return '🎡';
-        if (n.includes('keno')) return '🎰';
-        if (n.includes('cricket')) return '🏏';
-        if (n.includes('fruit')) return '🍒';
-        if (n.includes('sugar')) return '🍬';
-        if (n.includes('buffalo')) return '🐃';
-        if (n.includes('plinko')) return '⚫';
-        if (n.includes('bingo')) return '🔢';
-        if (n.includes('zombies')) return '🧟';
-        if (n.includes('roulette')) return '🎯';
-        if (n.includes('aviamasters')) return '🦅';
-        if (n.includes('mother clucker')) return '🐓';
-        if (n.includes('multi hot')) return '🔥';
-        if (n.includes('burning')) return '🔥';
-        if (n.includes('safari')) return '🦁';
-        if (n.includes('power of tiger')) return '🐯';
-        if (n.includes('penalty')) return '⚽';
-        if (n.includes('classic')) return '🎰';
-        return '🎮';
+    // ሁሉንም የጨዋታ ስሞች ከላይ ካለው ዕቃ ማውጣት
+    const games = Object.keys(gameImages);
+
+    // አማራጭ: ለማንኛውም ጨዋታ ምስል ባይገኝ የሚታይ ኢሞጂ (fallback)
+    function getGameImage(gameName) {
+        return gameImages[gameName] || null;
     }
 
     // ---------- ቀሪ ሂሳብ እና ውርርድ አስተዳደር (መነሻ 150) ----------
@@ -428,11 +435,11 @@
         const contentDiv = document.getElementById('gameContent');
         overlay.style.display = 'block';
         contentDiv.innerHTML = `
-            <h2 style="text-align:center; margin-bottom:10px;">${getEmoji(gameName)} ${gameName}</h2>
+            <h2 style="text-align:center; margin-bottom:10px;">${gameName}</h2>
             <div class="game-viewport">
                 <div id="gameMulti" class="multiplier-big">1.00x</div>
                 <div class="plane-animation">
-                    <div id="movingIcon" class="plane" style="font-size:2.5rem;">${getEmoji(gameName)}</div>
+                    <div id="movingIcon" class="plane" style="font-size:2.5rem;">✈️</div>
                 </div>
                 <button id="gameActionBtn" class="action-btn">🚀 SPIN (ውርርድ አስጀምር)</button>
                 <div id="gameStatus" class="status-msg">⚡ ውርርድ ለመጀመር SPIN ተጫን</div>
@@ -500,6 +507,7 @@
         isGameActive = false;
     }
 
+    // ---------- ጨዋታዎችን በምስል ማሳየት ----------
     function renderGameGrid() {
         const container = document.getElementById('gameGrid');
         container.innerHTML = '';
@@ -507,8 +515,11 @@
             const card = document.createElement('div');
             card.className = 'game-card';
             card.onclick = () => openGame(game);
+            const imgSrc = getGameImage(game);
             card.innerHTML = `
-                <div class="game-thumb">${getEmoji(game)}</div>
+                <div class="game-thumb">
+                    ${imgSrc ? `<img src="${imgSrc}" alt="${game}" loading="lazy">` : '<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem;">🎮</div>'}
+                </div>
                 <div class="game-info">
                     <div class="game-name">${game}</div>
                     <div class="game-cat">Crash Game</div>
