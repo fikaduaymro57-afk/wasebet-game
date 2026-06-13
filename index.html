@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Wase Bet – ዘመናዊ የቁማር ጣቢያ</title>
+    <title>Wase Bet - ሁሉም ጨዋታዎች</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
         }
         body {
-            background: #0a0a0c;
+            background: linear-gradient(135deg, #0a0f1a 0%, #0a0a0c 100%);
             color: white;
             padding-bottom: 80px;
         }
-        /* Header */
         .top-bar {
             background: #121316;
             padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #1f2026;
+            border-bottom: 1px solid #2a2c34;
             position: sticky;
             top: 0;
             z-index: 10;
@@ -31,7 +30,10 @@
         .logo {
             font-size: 1.4rem;
             font-weight: 800;
-            color: #ffcc00;
+            background: linear-gradient(135deg, #FFD966, #ff9800);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .balance-wrap {
             background: #1a1c22;
@@ -40,66 +42,36 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid #2a2c34;
         }
         .balance-amount {
             font-weight: bold;
             font-size: 1.1rem;
             color: #00ffcc;
         }
-        /* Bet Panel like UFC style */
         .bet-panel {
             background: #121316;
             margin: 16px;
-            padding: 16px;
+            padding: 12px 16px;
             border-radius: 20px;
-            border: 1px solid #1f2026;
-        }
-        .bet-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .bet-label {
-            color: #aaa;
-            font-size: 0.85rem;
-        }
-        .auto-badge {
-            background: #2a2c34;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #ffcc00;
-        }
-        .bet-quick-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 10px 0;
         }
         .bet-quick {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .bet-quick button {
             background: #1f2128;
             border: none;
             color: #ffcc00;
-            font-weight: bold;
             padding: 8px 16px;
             border-radius: 30px;
             cursor: pointer;
-            font-size: 0.9rem;
-            min-width: 55px;
-        }
-        .bet-quick.active {
-            background: #ffcc00;
-            color: black;
         }
         .bet-input {
             background: #1a1c22;
             border: 1px solid #2a2c34;
             color: #ffcc00;
-            font-weight: bold;
             padding: 8px 14px;
             border-radius: 30px;
             width: 100px;
@@ -111,10 +83,7 @@
             font-size: 1rem;
             font-weight: 600;
             color: #ffcc00;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        /* Game Grid */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -131,8 +100,8 @@
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.2s;
-            border: 1px solid #1f2026;
+            transition: 0.2s;
+            border: 1px solid #2a2c34;
         }
         .game-card:hover {
             transform: translateY(-3px);
@@ -154,22 +123,16 @@
             font-size: 12px;
             font-weight: 600;
         }
-        .game-cat {
-            font-size: 10px;
-            color: #888;
-            margin-top: 3px;
-        }
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: #121316;
-            border-top: 1px solid #1f2026;
+            border-top: 1px solid #2a2c34;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0 12px;
+            padding: 8px 0;
             z-index: 20;
         }
         .nav-item {
@@ -177,13 +140,11 @@
             color: #aaa;
             font-size: 0.7rem;
             cursor: pointer;
-            flex: 1;
         }
         .nav-icon {
             font-size: 1.3rem;
             margin-bottom: 4px;
         }
-        /* Game Overlay */
         .game-overlay {
             display: none;
             position: fixed;
@@ -191,30 +152,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10,10,12,0.98);
-            backdrop-filter: blur(8px);
+            background: rgba(10,10,15,0.98);
             z-index: 200;
             overflow-y: auto;
-            padding: 20px 16px;
+            padding: 20px;
         }
         .overlay-card {
             background: #121316;
             border-radius: 28px;
-            border: 1px solid #2a2c34;
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
         }
         .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
             background: #1f2128;
             padding: 8px 16px;
             border-radius: 40px;
-            font-weight: bold;
             cursor: pointer;
             margin-bottom: 20px;
+            display: inline-block;
             color: #ffcc00;
         }
         .action-btn {
@@ -226,64 +182,28 @@
             border-radius: 60px;
             margin-top: 15px;
             cursor: pointer;
-            font-size: 1rem;
             color: black;
         }
-        .cashout-btn {
-            background: #2e7d32;
-            color: white;
-        }
-        .multiplier-big {
-            font-size: 2.8rem;
+        .multiplier {
+            font-size: 2.5rem;
             font-weight: bold;
             color: #ff3366;
-            margin: 15px 0;
             text-align: center;
+            margin: 20px 0;
         }
-        .status-msg {
-            margin-top: 12px;
-            font-size: 0.8rem;
-            color: #ffaa66;
-            text-align: center;
+        .lottery-nums {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
         }
-        /* Chicken Road specific */
-        .road-container {
-            position: relative;
-            height: 180px;
-            background: #1a1c22;
-            border-radius: 16px;
-            overflow: hidden;
-            margin: 15px 0;
-            border: 1px solid #2a2c34;
-        }
-        .chicken-char {
-            position: absolute;
-            left: 20px;
-            bottom: 10px;
-            font-size: 3rem;
-            transition: left 0.05s linear;
-        }
-        .truck-char {
-            position: absolute;
-            right: -80px;
-            bottom: 10px;
-            font-size: 3.2rem;
-            transition: right 0.05s linear;
-        }
-        .bet-presets {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        .preset-btn {
+        .lottery-num {
             background: #1f2128;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: #ffcc00;
-            font-weight: bold;
+            padding: 12px;
+            text-align: center;
+            border-radius: 12px;
             cursor: pointer;
+            font-size: 1.2rem;
         }
     </style>
 </head>
@@ -297,26 +217,18 @@
     </div>
 </div>
 
-<!-- Bet Panel UFC Style -->
 <div class="bet-panel">
-    <div class="bet-row">
-        <span class="bet-label">Bet</span>
-        <span class="auto-badge">Auto</span>
-    </div>
-    <div class="bet-quick-buttons">
-        <button class="bet-quick" data-bet="4">4</button>
-        <button class="bet-quick" data-bet="10">10</button>
-        <button class="bet-quick" data-bet="40">40</button>
-        <button class="bet-quick" data-bet="100">100</button>
-    </div>
-    <div class="bet-row">
-        <span class="bet-label">Bet</span>
-        <input type="number" id="customBet" class="bet-input" value="10" step="1" min="4" max="500">
-        <span>ETB</span>
+    <div class="bet-quick">
+        <button onclick="setBet(5)">5</button>
+        <button onclick="setBet(10)">10</button>
+        <button onclick="setBet(20)">20</button>
+        <button onclick="setBet(50)">50</button>
+        <button onclick="setBet(100)">100</button>
+        <input type="number" id="customBet" class="bet-input" value="10" min="5" max="500">
     </div>
 </div>
 
-<div class="section-title">🎮 ታዋቂ ጨዋታዎች</div>
+<div class="section-title">🎮 ሁሉም ጨዋታዎች</div>
 <div id="gameGrid" class="games-grid"></div>
 
 <div class="bottom-nav">
@@ -335,278 +247,337 @@
 </div>
 
 <script>
-    // ---------- የጨዋታ ዝርዝር ----------
+    // ጨዋታዎች
     const games = [
-        "Aviator", "Fast Keno", "Mother Clucker", "Multi Hot 5", "Buffalo",
-        "Burning Class", "Fruity Wilds", "Safari Simba", "Chicken Road", "Fruit Rush",
-        "Mine Gems", "Mines", "Rocket Dice", "Sugar Heaven", "Aviamasters",
-        "Hot Keno", "Rabbit Road", "Fish Road", "Rocket", "Chicken Roast",
-        "Bingo", "Chicken vs Zombies", "Insta Keno", "Mini Roulette", "Dice",
-        "Cricket Road", "Wheel", "Mega Block", "Penalty Nations"
+        "🎰 Lottery", "✈️ Aviator", "🐔 Chicken Road", "🎡 Wheel",
+        "💣 Mines", "🎲 Dice", "🎯 Plinko", "🐇 Rabbit Road",
+        "🐟 Fish Road", "🏏 Cricket Road", "🧱 Mega Block", "🔥 Crash"
     ];
 
-    function getEmoji(name) {
-        const n = name.toLowerCase();
-        if (n.includes('aviator')) return '✈️';
-        if (n.includes('chicken')) return '🐔';
-        if (n.includes('wheel')) return '🎡';
-        if (n.includes('keno')) return '🎰';
-        if (n.includes('dice')) return '🎲';
-        return '🎮';
-    }
-
-    // ---------- ቀሪ ሂሳብ እና ውርርድ አስተዳደር ----------
-    let userBalance = 150.00;
+    let userBalance = 150;
     const balanceSpan = document.getElementById('globalBalance');
-    const customBetInput = document.getElementById('customBet');
+    const betInput = document.getElementById('customBet');
 
-    function updateBalanceUI() {
+    function updateBalance() {
         balanceSpan.innerText = userBalance.toFixed(2);
-        localStorage.setItem('wasebet_balance', userBalance);
+        localStorage.setItem('balance', userBalance);
     }
 
     function loadBalance() {
-        let saved = localStorage.getItem('wasebet_balance');
-        userBalance = (saved !== null && !isNaN(parseFloat(saved))) ? parseFloat(saved) : 150.00;
-        updateBalanceUI();
+        let saved = localStorage.getItem('balance');
+        if (saved) userBalance = parseFloat(saved);
+        updateBalance();
     }
 
-    function getCurrentBet() {
-        let val = parseFloat(customBetInput.value);
-        if (isNaN(val) || val < 4) return 10;
+    function getBet() {
+        let val = parseFloat(betInput.value);
+        if (isNaN(val) || val < 5) return 10;
         if (val > 500) return 500;
         return val;
     }
 
-    document.querySelectorAll('.bet-quick').forEach(btn => {
-        btn.addEventListener('click', () => {
-            customBetInput.value = parseInt(btn.dataset.bet);
-            document.querySelectorAll('.bet-quick').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        });
-    });
+    function setBet(amount) {
+        betInput.value = amount;
+    }
 
     function deductBet(amount) {
         if (userBalance < amount) {
-            alert(`❌ በቂ ነጥብ የለም! ቀሪ: ${userBalance.toFixed(2)} ETB`);
+            alert("❌ በቂ ነጥብ የለም!");
             return false;
         }
         userBalance -= amount;
-        updateBalanceUI();
+        updateBalance();
         return true;
     }
 
-    function addWinnings(amount) {
+    function addWin(amount) {
         userBalance += amount;
-        updateBalanceUI();
+        updateBalance();
     }
 
     function handleAction(type) {
         if (type === 'deposit') {
-            alert("📥 ገንዘብ ለማስገባት፦\n📞 ቴሌብር: 0974107425 (Mulualem)\n💵 ዝቅተኛ: 100 ETB\n💵 ከፍተኛ: 10,000 ETB\n\nከላክክ በኋላ ማስረጃ ወደ @WaseBet12 ላክ።");
-            window.open('https://t.me/WaseBet12', '_blank');
+            alert("📥 ቴሌብር: 0974107425 (Mulualem)\n💵 ዝቅተኛ: 100 ETB");
         } else {
-            alert("💸 ገንዘብ ለማውጣት፦\n⚠️ ዝቅተኛ መውጫ: 500 ETB\n\nአስተዳዳሪ @WaseBet12 ያነጋግሩ።");
-            window.open('https://t.me/WaseBet12', '_blank');
+            alert("💸 መውጫ 500 ETB ነው። አስተዳዳሪ @WaseBet12 ያነጋግሩ");
         }
     }
 
-    // ========== ጨዋታዎች ክስተቶች ==========
-    let activeGameInterval = null;
-    let isGameActive = false;
-    let currentMulti = 1.00;
-    let currentBetValue = 0;
-    let chickenInterval = null;
-
-    function openGame(gameName) {
-        const overlay = document.getElementById('gameOverlay');
-        const contentDiv = document.getElementById('gameContent');
-        overlay.style.display = 'block';
-        if (activeGameInterval) clearInterval(activeGameInterval);
-        if (chickenInterval) clearInterval(chickenInterval);
-        isGameActive = false;
-
-        // Chicken Road (የተሻሻለ እንደ ምስሉ)
-        if (gameName === "Chicken Road" || gameName.toLowerCase().includes("chicken")) {
-            contentDiv.innerHTML = `
-                <div style="text-align:center;">
-                    <h2>🐔 CHICKEN ROAD</h2>
-                    <div class="road-container">
-                        <div id="chickenChar" class="chicken-char">🐔</div>
-                        <div id="truckChar" class="truck-char">🚚</div>
-                    </div>
-                    <div class="bet-presets">
-                        <button class="preset-btn" data-preset="4">4 ETB</button>
-                        <button class="preset-btn" data-preset="8">8 ETB</button>
-                        <button class="preset-btn" data-preset="12">12 ETB</button>
-                        <button class="preset-btn" data-preset="20">20 ETB</button>
-                    </div>
-                    <button id="gameActionBtn" class="action-btn">🏁 Play</button>
-                    <div id="gameStatus" class="status-msg">⚡ ለመጫወት Play ተጫን</div>
-                </div>
-            `;
-            // ፈጣን ውርርድ ቁልፎች
-            document.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.onclick = () => {
-                    customBetInput.value = parseInt(btn.dataset.preset);
-                };
-            });
-            attachChickenEvents();
-        }
-        // Aviator
-        else if (gameName === "Aviator") {
-            contentDiv.innerHTML = `
-                <h2 style="text-align:center;">✈️ AVIATOR</h2>
-                <div class="multiplier-big" id="gameMulti">1.00x</div>
-                <button id="gameActionBtn" class="action-btn">🚀 SPIN</button>
-                <div id="gameStatus" class="status-msg">⚡ ዝግጁ</div>
-            `;
-            attachCrashEvents(gameName);
-        }
-        // Wheel
-        else if (gameName === "Wheel") {
-            contentDiv.innerHTML = `
-                <h2 style="text-align:center;">🎡 LUCKY WHEEL</h2>
-                <div id="wheel" style="width:200px; height:200px; margin:20px auto; border-radius:50%; background:conic-gradient(red 0deg 45deg, blue 45deg 90deg, green 90deg 135deg, yellow 135deg 180deg, purple 180deg 225deg, orange 225deg 270deg, cyan 270deg 315deg, pink 315deg 360deg); transition:transform 4s ease-out;"></div>
-                <button id="wheelBtn" class="action-btn">🎲 SPIN</button>
-                <div id="gameStatus" class="status-msg">⚡ ዊሉን አሽከርክር</div>
-            `;
-            document.getElementById("wheelBtn").onclick = () => {
-                let bet = getCurrentBet();
-                if (!deductBet(bet)) return;
-                const wheel = document.getElementById("wheel");
-                const deg = 3600 + Math.random() * 1000;
-                wheel.style.transform = `rotate(${deg}deg)`;
-                setTimeout(() => {
-                    const stopDeg = deg % 360;
-                    let multiplier = 1.0;
-                    if (stopDeg < 45) multiplier = 2.0;
-                    else if (stopDeg < 90) multiplier = 1.5;
-                    else if (stopDeg < 135) multiplier = 0;
-                    else if (stopDeg < 180) multiplier = 3.0;
-                    else if (stopDeg < 225) multiplier = 1.2;
-                    else if (stopDeg < 270) multiplier = 0;
-                    else if (stopDeg < 315) multiplier = 4.0;
-                    else multiplier = 2.5;
-                    if (multiplier > 0) {
-                        let win = Math.floor(bet * multiplier);
-                        addWinnings(win);
-                        document.getElementById("gameStatus").innerHTML = `🎉 አሸነፍክ! ${multiplier}x → ${win} ETB`;
-                    } else {
-                        document.getElementById("gameStatus").innerHTML = `💥 ተሸነፍክ! አጣህ ${bet} ETB`;
-                    }
-                    setTimeout(() => closeGame(), 2000);
-                }, 4000);
-            };
-        }
-        // ሌሎች ጨዋታዎች (Crash Game)
-        else {
-            contentDiv.innerHTML = `
-                <h2 style="text-align:center;">${getEmoji(gameName)} ${gameName}</h2>
-                <div class="multiplier-big" id="gameMulti">1.00x</div>
-                <button id="gameActionBtn" class="action-btn">🚀 SPIN</button>
-                <div id="gameStatus" class="status-msg">⚡ ዝግጁ</div>
-            `;
-            attachCrashEvents(gameName);
+    // የሎተሪ ጨዋታ
+    function showLottery() {
+        let content = `
+            <h2>🎰 ሎተሪ</h2>
+            <p>ከ1-10 ቁጥር ምረጥ (ውርርድ: ${getBet()} ETB, 7x)</p>
+            <div class="lottery-nums" id="lotteryNums"></div>
+            <div id="lotteryResult"></div>
+        `;
+        document.getElementById('gameContent').innerHTML = content;
+        let container = document.getElementById('lotteryNums');
+        for (let i = 1; i <= 10; i++) {
+            let btn = document.createElement('div');
+            btn.className = 'lottery-num';
+            btn.innerText = i;
+            btn.onclick = () => playLottery(i);
+            container.appendChild(btn);
         }
     }
 
-    function attachCrashEvents(gameName) {
-        const actionBtn = document.getElementById('gameActionBtn');
-        if (!actionBtn) return;
-        actionBtn.onclick = () => {
-            if (!isGameActive) {
-                let bet = getCurrentBet();
+    function playLottery(num) {
+        let bet = getBet();
+        if (!deductBet(bet)) return;
+        let winning = Math.floor(Math.random() * 10) + 1;
+        if (num === winning) {
+            let win = bet * 7;
+            addWin(win);
+            document.getElementById('lotteryResult').innerHTML = `<p style="color:#00ffcc">🎉 አሸነፍክ! ቁጥር: ${winning} | አሸነፍከው: ${win} ETB</p>`;
+        } else {
+            document.getElementById('lotteryResult').innerHTML = `<p style="color:#ff6666">😢 አልሸነፍክም! አሸናፊ ቁጥር: ${winning}</p>`;
+        }
+        setTimeout(() => closeGame(), 2000);
+    }
+
+    // አቪዬተር ጨዋታ
+    let aviInterval, aviActive, aviMulti, aviBet;
+    function showAviator() {
+        document.getElementById('gameContent').innerHTML = `
+            <h2>✈️ አቪዬተር</h2>
+            <div class="multiplier" id="aviMulti">1.00x</div>
+            <button id="aviBtn" class="action-btn">🚀 SPIN</button>
+            <div id="aviStatus"></div>
+        `;
+        let btn = document.getElementById('aviBtn');
+        aviActive = false;
+        btn.onclick = () => {
+            if (!aviActive) {
+                let bet = getBet();
                 if (!deductBet(bet)) return;
-                currentBetValue = bet;
-                isGameActive = true;
-                currentMulti = 1.00;
-                const multSpan = document.getElementById('gameMulti');
-                const statusSpan = document.getElementById('gameStatus');
-                multSpan.innerText = "1.00x";
-                statusSpan.innerHTML = `🎲 ${gameName} እየበረረ ነው...`;
-                actionBtn.innerText = "🛬 ካሽ አውት";
-                actionBtn.classList.add('cashout-btn');
-                if (activeGameInterval) clearInterval(activeGameInterval);
-                activeGameInterval = setInterval(() => {
-                    if (isGameActive) {
-                        currentMulti += 0.045;
-                        multSpan.innerText = currentMulti.toFixed(2) + "x";
-                        if (Math.random() < 0.09 && currentMulti > 1.2) {
-                            clearInterval(activeGameInterval);
-                            statusSpan.innerHTML = `💥 ${gameName} ወደቀ! አጣህ ${currentBetValue} ETB`;
-                            isGameActive = false;
-                            actionBtn.innerText = "🚀 SPIN";
-                            actionBtn.classList.remove('cashout-btn');
+                aviBet = bet;
+                aviActive = true;
+                aviMulti = 1;
+                document.getElementById('aviMulti').innerText = "1.00x";
+                btn.innerText = "🛬 ካሽ አውት";
+                if (aviInterval) clearInterval(aviInterval);
+                aviInterval = setInterval(() => {
+                    if (aviActive) {
+                        aviMulti += 0.05;
+                        document.getElementById('aviMulti').innerText = aviMulti.toFixed(2) + "x";
+                        if (Math.random() < 0.08 && aviMulti > 1.2) {
+                            clearInterval(aviInterval);
+                            document.getElementById('aviStatus').innerHTML = "💥 ወደቀ! አጣህ " + aviBet + " ETB";
+                            aviActive = false;
+                            btn.innerText = "🚀 SPIN";
                         }
                     }
-                }, 90);
+                }, 80);
             } else {
-                if (activeGameInterval) clearInterval(activeGameInterval);
-                let win = Math.floor(currentBetValue * currentMulti);
-                addWinnings(win);
-                document.getElementById('gameStatus').innerHTML = `🏆 ካሽ አውት! አሸነፍክ ${win} ETB (${currentMulti.toFixed(2)}x) 🎉`;
-                isGameActive = false;
-                actionBtn.innerText = "🚀 SPIN";
-                actionBtn.classList.remove('cashout-btn');
+                clearInterval(aviInterval);
+                let win = Math.floor(aviBet * aviMulti);
+                addWin(win);
+                document.getElementById('aviStatus').innerHTML = "🏆 ካሽ አውት! አሸነፍክ " + win + " ETB (" + aviMulti.toFixed(2) + "x)";
+                aviActive = false;
+                btn.innerText = "🚀 SPIN";
+                setTimeout(() => closeGame(), 2000);
             }
         };
     }
 
-    function attachChickenEvents() {
-        const actionBtn = document.getElementById('gameActionBtn');
-        if (!actionBtn) return;
-        actionBtn.onclick = () => {
+    // ቺከን ሮድ
+    let chickenInterval;
+    function showChicken() {
+        document.getElementById('gameContent').innerHTML = `
+            <h2>🐔 ቺከን ሮድ</h2>
+            <div style="position:relative; height:150px; background:#1a1c22; border-radius:16px; overflow:hidden;">
+                <div id="chicken" style="position:absolute; left:20px; bottom:10px; font-size:3rem;">🐔</div>
+                <div id="truck" style="position:absolute; right:-60px; bottom:10px; font-size:2.5rem;">🚚</div>
+            </div>
+            <button id="chickenBtn" class="action-btn">🏁 ጀምር</button>
+            <div id="chickenStatus"></div>
+        `;
+        let btn = document.getElementById('chickenBtn');
+        btn.onclick = () => {
             if (chickenInterval) return;
-            let bet = getCurrentBet();
+            let bet = getBet();
             if (!deductBet(bet)) return;
-            const chickenDiv = document.getElementById('chickenChar');
-            const truckDiv = document.getElementById('truckChar');
-            if (!chickenDiv || !truckDiv) return;
-            let chickenX = 20;
-            let truckX = 320;
-            chickenDiv.style.left = chickenX + "px";
-            truckDiv.style.right = "-80px";
-            document.getElementById('gameStatus').innerHTML = "🐔 እየሮጠች ነው...";
+            let chicken = document.getElementById('chicken');
+            let truck = document.getElementById('truck');
+            let chickenX = 20, truckX = -60;
+            chicken.style.left = chickenX + "px";
+            truck.style.right = truckX + "px";
             chickenInterval = setInterval(() => {
-                chickenX += 7;
-                truckX -= 8;
-                chickenDiv.style.left = chickenX + "px";
-                truckDiv.style.right = (window.innerWidth - truckX) + "px";
+                chickenX += 6;
+                truckX -= 7;
+                chicken.style.left = chickenX + "px";
+                truck.style.right = truckX + "px";
                 if (chickenX >= 280) {
                     clearInterval(chickenInterval);
-                    const win = Math.floor(bet * 2.2);
-                    addWinnings(win);
-                    document.getElementById('gameStatus').innerHTML = `🎉 ዶሮዋ ደረሰች! አሸነፍክ ${win} ETB!`;
+                    let win = Math.floor(bet * 2);
+                    addWin(win);
+                    document.getElementById('chickenStatus').innerHTML = "🎉 ዶሮዋ ደረሰች! +" + win + " ETB";
+                    chickenInterval = null;
                     setTimeout(() => closeGame(), 2000);
-                } else if (Math.abs(chickenX - (340 - truckX)) < 45 && truckX > 100) {
+                } else if (Math.abs(chickenX - (320 + truckX)) < 40 && truckX > -20) {
                     clearInterval(chickenInterval);
-                    document.getElementById('gameStatus').innerHTML = `💥 መኪና መታች! አጣህ ${bet} ETB.`;
+                    document.getElementById('chickenStatus').innerHTML = "💥 መኪና መታች! አጣህ " + bet + " ETB";
+                    chickenInterval = null;
                     setTimeout(() => closeGame(), 2000);
                 }
             }, 55);
         };
     }
 
-    function closeGame() {
-        if (activeGameInterval) clearInterval(activeGameInterval);
-        if (chickenInterval) clearInterval(chickenInterval);
-        document.getElementById('gameOverlay').style.display = 'none';
-        isGameActive = false;
+    // ዊል
+    function showWheel() {
+        document.getElementById('gameContent').innerHTML = `
+            <h2>🎡 ዊል</h2>
+            <div id="wheel" style="width:200px; height:200px; margin:20px auto; border-radius:50%; background:conic-gradient(red,blue,green,yellow,purple,orange,cyan,pink); transition:4s ease-out;"></div>
+            <button id="wheelBtn" class="action-btn">🎲 SPIN</button>
+            <div id="wheelResult"></div>
+        `;
+        document.getElementById('wheelBtn').onclick = () => {
+            let bet = getBet();
+            if (!deductBet(bet)) return;
+            let wheel = document.getElementById('wheel');
+            let deg = 3600 + Math.random() * 1000;
+            wheel.style.transform = "rotate(" + deg + "deg)";
+            setTimeout(() => {
+                let stop = deg % 360;
+                let mult = 1;
+                if (stop < 45) mult = 2;
+                else if (stop < 90) mult = 1.5;
+                else if (stop < 135) mult = 0;
+                else if (stop < 180) mult = 3;
+                else if (stop < 225) mult = 1.2;
+                else if (stop < 270) mult = 0;
+                else if (stop < 315) mult = 4;
+                else mult = 2.5;
+                if (mult > 0) {
+                    let win = Math.floor(bet * mult);
+                    addWin(win);
+                    document.getElementById('wheelResult').innerHTML = "🎉 " + mult + "x! አሸነፍክ " + win + " ETB";
+                } else {
+                    document.getElementById('wheelResult').innerHTML = "💥 ተሸነፍክ! አጣህ " + bet + " ETB";
+                }
+                setTimeout(() => closeGame(), 2000);
+            }, 4000);
+        };
     }
 
-    function renderGameGrid() {
-        const container = document.getElementById('gameGrid');
+    // ክራሽ ጨዋታ (መደበኛ)
+    let crashInterval, crashActive, crashMulti, crashBet;
+    function showCrash() {
+        document.getElementById('gameContent').innerHTML = `
+            <h2>🔥 CRASH</h2>
+            <div class="multiplier" id="crashMulti">1.00x</div>
+            <button id="crashBtn" class="action-btn">🚀 SPIN</button>
+            <div id="crashStatus"></div>
+        `;
+        let btn = document.getElementById('crashBtn');
+        crashActive = false;
+        btn.onclick = () => {
+            if (!crashActive) {
+                let bet = getBet();
+                if (!deductBet(bet)) return;
+                crashBet = bet;
+                crashActive = true;
+                crashMulti = 1;
+                document.getElementById('crashMulti').innerText = "1.00x";
+                btn.innerText = "🛬 ካሽ አውት";
+                if (crashInterval) clearInterval(crashInterval);
+                crashInterval = setInterval(() => {
+                    if (crashActive) {
+                        crashMulti += 0.06;
+                        document.getElementById('crashMulti').innerText = crashMulti.toFixed(2) + "x";
+                        if (Math.random() < 0.1 && crashMulti > 1.3) {
+                            clearInterval(crashInterval);
+                            document.getElementById('crashStatus').innerHTML = "💥 CRASH! አጣህ " + crashBet + " ETB";
+                            crashActive = false;
+                            btn.innerText = "🚀 SPIN";
+                        }
+                    }
+                }, 85);
+            } else {
+                clearInterval(crashInterval);
+                let win = Math.floor(crashBet * crashMulti);
+                addWin(win);
+                document.getElementById('crashStatus').innerHTML = "🏆 ካሽ አውት! +" + win + " ETB";
+                crashActive = false;
+                btn.innerText = "🚀 SPIN";
+                setTimeout(() => closeGame(), 2000);
+            }
+        };
+    }
+
+    function showDefault(game) {
+        document.getElementById('gameContent').innerHTML = `
+            <h2>${game}</h2>
+            <div class="multiplier" id="gameMulti">1.00x</div>
+            <button id="gameBtn" class="action-btn">🚀 SPIN</button>
+            <div id="gameStatus"></div>
+        `;
+        let btn = document.getElementById('gameBtn');
+        let active = false, multi = 1, betAmt;
+        btn.onclick = () => {
+            if (!active) {
+                let bet = getBet();
+                if (!deductBet(bet)) return;
+                betAmt = bet;
+                active = true;
+                multi = 1;
+                document.getElementById('gameMulti').innerText = "1.00x";
+                btn.innerText = "🛬 ካሽ አውት";
+                let interval = setInterval(() => {
+                    if (active) {
+                        multi += 0.05;
+                        document.getElementById('gameMulti').innerText = multi.toFixed(2) + "x";
+                        if (Math.random() < 0.08 && multi > 1.2) {
+                            clearInterval(interval);
+                            document.getElementById('gameStatus').innerHTML = "💥 ወደቀ! አጣህ " + betAmt + " ETB";
+                            active = false;
+                            btn.innerText = "🚀 SPIN";
+                        }
+                    }
+                }, 80);
+                window.currentInterval = interval;
+            } else {
+                clearInterval(window.currentInterval);
+                let win = Math.floor(betAmt * multi);
+                addWin(win);
+                document.getElementById('gameStatus').innerHTML = "🏆 ካሽ አውት! +" + win + " ETB";
+                active = false;
+                btn.innerText = "🚀 SPIN";
+                setTimeout(() => closeGame(), 2000);
+            }
+        };
+    }
+
+    function openGame(gameName) {
+        document.getElementById('gameOverlay').style.display = 'block';
+        if (gameName === "🎰 Lottery") showLottery();
+        else if (gameName === "✈️ Aviator") showAviator();
+        else if (gameName === "🐔 Chicken Road") showChicken();
+        else if (gameName === "🎡 Wheel") showWheel();
+        else if (gameName === "🔥 Crash") showCrash();
+        else showDefault(gameName);
+    }
+
+    function closeGame() {
+        if (aviInterval) clearInterval(aviInterval);
+        if (chickenInterval) clearInterval(chickenInterval);
+        if (crashInterval) clearInterval(crashInterval);
+        document.getElementById('gameOverlay').style.display = 'none';
+    }
+
+    function renderGames() {
+        let container = document.getElementById('gameGrid');
         container.innerHTML = '';
         games.forEach(game => {
-            const card = document.createElement('div');
+            let card = document.createElement('div');
             card.className = 'game-card';
             card.onclick = () => openGame(game);
             card.innerHTML = `
-                <div class="game-thumb">${getEmoji(game)}</div>
+                <div class="game-thumb">${game.split(' ')[0]}</div>
                 <div class="game-info">
                     <div class="game-name">${game}</div>
-                    <div class="game-cat">Crash Game</div>
                 </div>
             `;
             container.appendChild(card);
@@ -614,7 +585,7 @@
     }
 
     loadBalance();
-    renderGameGrid();
+    renderGames();
 </script>
 </body>
 </html>
